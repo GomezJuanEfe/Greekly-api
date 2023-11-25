@@ -21,12 +21,12 @@ model User {
 
 model Orders {
   id             String      @id @default(uuid())
-  User           User        @relation(fields: [user_id], references: [id])
+  user           User        @relation(fields: [user_id], references: [id])
   user_id        String
   customer_name  String
   customer_email String
   order_total    Int
-  order_status   OrderStatus
+  order_status   OrderStatus @default(PENDING)
   products       Products[]
   payment_id     String?
   order_date     DateTime    @default(now())

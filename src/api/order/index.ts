@@ -1,17 +1,20 @@
 import { Router } from "express";
-import { getAllOrders } from "./order.controller";
+import { hasRole, isAuthenticated } from "../../auth/auth.controller";
+import {
+  getAllOrdersHandler,
+  createOrderHandler,
+  getOrdersByUserHandler
+} from "./order.controller";
 
 const router = Router();
 
+// CREATE -> POST api/order
+router.post("/", isAuthenticated, createOrderHandler)
 
-// CREATE
-
-// READ
-router.get("/", getAllOrders);
-
-// UPDATE
-
-// DELETE
+// READ -> GET api/order
+router.get("/", isAuthenticated, hasRole(['ADMIN']), getAllOrdersHandler);
+// READ -> GET api/order/getOrdersByUser
+router.get("/getOrdersByUser", isAuthenticated, getOrdersByUserHandler);
 
 
 export default router;

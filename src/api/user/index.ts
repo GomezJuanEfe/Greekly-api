@@ -1,17 +1,11 @@
 import { Router } from "express";
-import { getAllUsers } from "./user.controller";
+import { createUserHandler } from "./user.controller";
 
 const router = Router();
 
 
-// CREATE
-
-// READ
-router.get("/", getAllUsers)
-
-// UPDATE
-
-// DELETE
+// CREATE -> POST /api/user
+router.post('/', createUserHandler)
 
 
 export default router;
