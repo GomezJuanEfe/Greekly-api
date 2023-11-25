@@ -1,17 +1,20 @@
-import express from 'express'
+require('dotenv').config();
+
+import express from 'express';
 
 import configExpress from './config/express'
 import routes from './routes'
 
-const app = express()
-const port = process.env.PORT || 8080
+
+const app = express();
+const port = process.env.PORT || 8080;
 
 //Setup Express
-configExpress(app)
+configExpress(app);
 
 //Setup Routes
-routes(app)
+routes(app);
 
 app.listen(port, () => {
   console.log(`Greekly ecommerce backend listening on port ${port}`)
-})
+});
