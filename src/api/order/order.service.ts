@@ -71,3 +71,21 @@ export const getOrdersByUser = async (id: string) => {
     throw error
   }
 }
+
+export const getOrderById = async (id: string, productId: string) => {
+  try {
+    const orders = await prisma.orders.findUnique({
+      where: {
+        user_id: id,
+        id: productId
+      },
+      include: {
+        products: true
+      }
+    });
+
+    return orders
+  } catch (error: any) {
+    throw error
+  }
+}
