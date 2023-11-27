@@ -5,13 +5,19 @@ import {
   createOrder,
   getAllOrders,
   sumProducts,
-  getOrdersByUser
+  getOrdersByUser,
+  getOrderById
 } from "./order.service";
 
 export const createOrderHandler = async (req: AuthRequest, res: Response) => {
   try {
     const { id, email, name } = req.user as User;
-    const { products } = req.body;
+    const { products, paymentId, order_status } = req.body;
+    console.log(req.body)
+
+    if (products.length === 0) {
+      throw new Error('No products in the order');
+    }
 
     const orderTotal = await sumProducts(products);
 
@@ -21,6 +27,8 @@ export const createOrderHandler = async (req: AuthRequest, res: Response) => {
       customer_email: email,
       order_total: orderTotal,
       products,
+      payment_id: paymentId,
+      order_status
     }
 
     const orderCreated = await createOrder(order);
@@ -29,8 +37,8 @@ export const createOrderHandler = async (req: AuthRequest, res: Response) => {
   } catch (error: any) {
 
     res.status(400).json({
-      error: error.message,
-      message: 'Authentication required'
+      error: 'Error on the order creation',
+      message: error.message,
     });
   }
 }
@@ -61,6 +69,25 @@ export const getOrdersByUserHandler = async (req: AuthRequest, res: Response) =>
       message: 'Success',
       data: {
         orders
+      }
+    });
+  } catch (error: any) {
+
+    res.status(400).json({ error: error.message });
+  }
+}
+
+export const getOrderByIdHandler = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.user as User;
+    const { productId } = req.params;
+
+    const order = await getOrderById(id, productId);
+
+    res.status(200).json({
+      message: 'Success',
+      data: {
+        order
       }
     });
   } catch (error: any) {
